@@ -1,6 +1,26 @@
+from util import color
+
 class Pattern:
+    def __init__(self):
+        self._children = []
+
+    def add_child(self, child):
+        self._children.append(child)
+
     def at(self, pos):
         pass
 
+    def getAt(self, pos):
+        if pos > 1 or pos < 0:
+            return color.transparent
+
     def update(self, dt):
-        pass # FIXME
+        pass
+
+    def change(self):
+        pass
+
+    def fullupdate(self, dt):
+        for child in self._children:
+            child.fullupdate(dt)
+        self.update(dt)

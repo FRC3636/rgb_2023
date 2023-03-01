@@ -1,24 +1,33 @@
-from util.color import blend
-from colour import Color
-from patterns.pattern import Pattern
-from patterns.solid import SolidPattern
+import math
 
-class BreathePattern(Pattern):
-    def __init__(self, on, off = SolidPattern(Color("black")), speed = 2):
+from util import color
+from patterns.pattern import Pattern
+from patterns.solid import Solid
+
+class Breathe(Pattern):
+    def __init__(self, on, off = Solid(color.black), speed = 4):
+        super().__init__()
         self.on = on
         self.off = off
         self.speed = speed
-        self.state = 0
-    
+        self.time = 0
+        self.current = 0.5
+        self.direction = 1
+
     def at(self, pos):
-        progress = self.state
-        if progress > 1:
-            progress = 2 - progress
-        return blend(
+        return color.blend(
             self.on.at(pos),
             self.off.at(pos),
-            progress
+            self.current
         )
 
     def update(self, dt):
-        self.state = (self.state + (self.speed * 2) * dt) % 2
+        self.time = self.time + dt * self.speed % (math.pi * 2)
+        new = (math.sin(self.time) + 1) / 2
+        if new >= self.current and self.direction == -1:
+            self.off.change()
+            self.direction = 1
+        elif new <= self.current and self.direction == 1:
+            self.on.change()
+            self.direction = -1
+        self.current = new

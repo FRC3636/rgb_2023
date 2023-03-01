@@ -1,14 +1,15 @@
-from colour import Color
+from util import color
 from patterns.pattern import Pattern
 
-class RainbowPattern(Pattern):
-    def __init__(self, saturation = 1, lightness = 0.5):
+class Rainbow(Pattern):
+    def __init__(self, saturation = 1, value = 0.5):
+        super().__init__()
         self.saturation = saturation
-        self.lightness = lightness
+        self.value = value
         self.offset = 0
     
     def at(self, pos):
-        return Color(hsl = (pos, self.saturation, self.lightness))
+        return color.hsv(pos, self.saturation, self.value)
     
     def update(self, dt):
         self.offset += dt

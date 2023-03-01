@@ -1,58 +1,65 @@
-from colour import Color
+from util import color
 
-from patterns.rainbow import RainbowPattern
-from patterns.moving import MovingPattern
-from patterns.solid import SolidPattern
-from patterns.hybrid import HybridPattern
-from patterns.scale import ScaledPattern
-from patterns.breathe import BreathePattern
+from patterns.rainbow import Rainbow
+from patterns.moving import Moving
+from patterns.solid import Solid
+from patterns.hybrid import Hybrid
+from patterns.scale import Scaled
+from patterns.breathe import Breathe
+from patterns.cycle import Cycle
+from patterns.gradient import Gradient
+from patterns.just import Just
 
 class Settings:
     def __init__(self):
         self.presets = {
-            "cube": MovingPattern(
-                ScaledPattern(
-                    HybridPattern(
-                        SolidPattern(
-                            Color("black")
+            "cube": Moving(
+                Scaled(
+                    Hybrid(
+                        Solid(
+                            color.black
                         ),
-                        SolidPattern(
-                            Color("magenta")
+                        Solid(
+                            color.magenta
                         )
                     ),
                     0.5
                 )
             ),
-            "cone": MovingPattern(
-                ScaledPattern(
-                    HybridPattern(
-                        SolidPattern(
-                            Color("black")
+            "cone": Moving(
+                Scaled(
+                    Hybrid(
+                        Solid(
+                            color.black
                         ),
-                        SolidPattern(
-                            Color(
-                                rgb = (1, 0.25, 0)
-                            )
+                        Solid(
+                            color.Color(255, 64, 0)
                         )
                     ),
                     0.25
                 )
             ),
-            "resting": BreathePattern(
-                SolidPattern(
-                    Color("blue")
+            "resting": Breathe(
+                Solid(
+                    color.blue
                 )
             ),
-            "rainbow": MovingPattern(
-                ScaledPattern(
-                    RainbowPattern(),
+            "rainbow": Moving(
+                Scaled(
+                    Rainbow(),
                     1/2
+                )
+            ),
+            "whole_rainbow": Just(
+                Moving(
+                    Rainbow(),
+                    0.25
                 )
             )
         }
         self.properties = {
             "enabled": True,
-            "presetId": "rainbow"
+            "presetId": "whole_rainbow"
         }
 
     def getPattern(self):

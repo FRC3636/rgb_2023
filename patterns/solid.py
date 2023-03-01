@@ -1,7 +1,8 @@
 from patterns.pattern import Pattern
 
-class SolidPattern(Pattern):
+class Solid(Pattern):
     def __init__(self, color):
+        super().__init__()
         self.color = color
 
     def at(self, pos):

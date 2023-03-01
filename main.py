@@ -6,13 +6,13 @@ import ntcore
 
 from settings import Settings
 
-BRIGHTNESS = 0.2
+BRIGHTNESS = 0.1
 ORDER = neopixel.GRB
 NUM_LEDS = 117
 DATA_PIN = board.D18
 ADDR = "10.36.36.2"
 # ADDR = "192.168.137.1"
-DELAY = 1/50
+DELAY = 1/30
 
 strip = neopixel.NeoPixel(
     DATA_PIN, NUM_LEDS, pixel_order = ORDER, brightness = BRIGHTNESS, auto_write = False
@@ -32,10 +32,9 @@ while True:
     pattern = settings.getPattern()
     if settings.properties["enabled"]:
         for i in range(NUM_LEDS):
-            (r, g, b) = pattern.at(i / NUM_LEDS).rgb
-            color = (int(r * 255), int(g * 255), int(b * 255))
-            strip[i] = color
-        pattern.update(DELAY)
+            color = pattern.at(i / NUM_LEDS)
+            strip[i] = (color.r, color.g, color.b)
+        pattern.fullupdate(DELAY)
     else:
         strip.fill((0, 0, 0))
     strip.show()

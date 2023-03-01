@@ -1,8 +1,11 @@
 import math
 from patterns.pattern import Pattern
 
-class HybridPattern(Pattern):
+class Hybrid(Pattern):
     def __init__(self, *args):
+        super().__init__()
+        for child in args:
+            self.add_child(child)
         self.children = args
     
     def at(self, pos):
