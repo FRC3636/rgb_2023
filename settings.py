@@ -10,6 +10,9 @@ from patterns.cycle import Cycle
 from patterns.gradient import Gradient
 from patterns.just import Just
 from patterns.noise import Noise
+from patterns.memory import Memory
+from patterns.rain import Rain
+from patterns.choice import Choice
 
 class Settings:
     def __init__(self):
@@ -45,6 +48,19 @@ class Settings:
                     color.blue
                 )
             ),
+            "noise_rain": Rain(
+                Memory(
+                    Noise(value = 0.7, saturation = 1)
+                )
+            ),
+            "wip": Rain(
+                Memory(
+                    Choice(
+                        Solid(color.red),
+                        Solid(color.blue)
+                    )
+                )
+            ),
             "rainbow": Moving(
                 Scaled(
                     Rainbow(),
@@ -68,6 +84,11 @@ class Settings:
                     ),
                     1/4
                 )
+            ),
+            "rainbow_rain": Rain(
+                Moving(
+                    Rainbow()
+                )
             )
         }
         self.properties = {
@@ -75,7 +96,7 @@ class Settings:
             "presetId": "uncover_rainbow"
         }
 
-    def getPattern(self):
+    def get_pattern(self):
         return self.presets[self.properties["presetId"]]
 
     def update(self, nwtable):

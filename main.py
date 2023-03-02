@@ -29,7 +29,7 @@ settings.push(nwtable)
 
 while True:
     settings.update(nwtable)
-    pattern = settings.getPattern()
+    pattern = settings.get_pattern()
     if settings.properties["enabled"]:
         for i in range(NUM_LEDS):
             color = pattern.at(i / NUM_LEDS)

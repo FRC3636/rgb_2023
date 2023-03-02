@@ -25,9 +25,9 @@ class Breathe(Pattern):
         self.time = self.time + dt * self.speed % (math.pi * 2)
         new = (math.sin(self.time) + 1) / 2
         if new >= self.current and self.direction == -1:
-            self.off.change()
+            self.off.fullchange()
             self.direction = 1
         elif new <= self.current and self.direction == 1:
-            self.on.change()
+            self.on.fullchange()
             self.direction = -1
         self.current = new

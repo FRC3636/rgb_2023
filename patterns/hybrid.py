@@ -1,7 +1,7 @@
 import math
 from patterns.pattern import Pattern
 
-class Hybrid(Pattern):
+class Hybrid(Pattern): # FIXME: doesn't handle changes properly
     def __init__(self, *args):
         super().__init__()
         for child in args:
