@@ -10,10 +10,6 @@ class Pattern:
     def at(self, pos):
         pass
 
-    def getAt(self, pos):
-        if pos > 1 or pos < 0:
-            return color.transparent
-
     def update(self, dt):
         pass
 

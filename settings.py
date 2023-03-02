@@ -9,6 +9,7 @@ from patterns.breathe import Breathe
 from patterns.cycle import Cycle
 from patterns.gradient import Gradient
 from patterns.just import Just
+from patterns.noise import Noise
 
 class Settings:
     def __init__(self):
@@ -23,7 +24,7 @@ class Settings:
                             color.magenta
                         )
                     ),
-                    0.5
+                    1/4
                 )
             ),
             "cone": Moving(
@@ -36,7 +37,7 @@ class Settings:
                             color.Color(255, 64, 0)
                         )
                     ),
-                    0.25
+                    1/4
                 )
             ),
             "resting": Breathe(
@@ -55,11 +56,23 @@ class Settings:
                     Rainbow(),
                     0.25
                 )
+            ),
+            "uncover_rainbow": Moving(
+                Scaled(
+                    Hybrid(
+                        Moving(
+                            Rainbow(),
+                            speed = -1/3 / (1/4)
+                        ),
+                        Solid(color.black)
+                    ),
+                    1/4
+                )
             )
         }
         self.properties = {
             "enabled": True,
-            "presetId": "whole_rainbow"
+            "presetId": "uncover_rainbow"
         }
 
     def getPattern(self):

@@ -10,8 +10,8 @@ BRIGHTNESS = 0.1
 ORDER = neopixel.GRB
 NUM_LEDS = 117
 DATA_PIN = board.D18
-ADDR = "10.36.36.2"
-# ADDR = "192.168.137.1"
+# ADDR = "10.36.36.2"
+ADDR = "192.168.137.1"
 DELAY = 1/30
 
 strip = neopixel.NeoPixel(
