@@ -78,12 +78,24 @@ class Settings:
                     1/4
                 )
             ),
-            "uncover_rainbow": Moving(
+            "rainbow_snakes":
+            Moving(
+                Scaled(
+                    Hybrid(
+                        Rainbow(),
+                        Solid(color.black)
+                    ),
+                    1/4
+                )
+            ),
+            "rainbow_snakes2": Moving(
                 Scaled(
                     Hybrid(
                         Moving(
                             Rainbow(),
-                            speed = -1/3 * 4
+                            speed = -1/3
+                                * 2 # from hybrid
+                                * 4 # from scaled
                         ),
                         Solid(color.black)
                     ),
@@ -122,7 +134,7 @@ class Settings:
         }
         self.properties = {
             "enabled": True,
-            "presetId": "uncover_rainbow"
+            "presetId": "rainbow_snakes2"
         }
 
     def get_pattern(self):

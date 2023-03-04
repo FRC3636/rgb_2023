@@ -12,4 +12,4 @@ class Position:
         return Position(self.dpos + amnt, self.dtotal)
     
     def scale(self, amnt):
-        return Position(self.dpos * amnt, self.dtotal * amnt)
+        return Position(self.dpos * amnt, self.dtotal)

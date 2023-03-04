@@ -8,14 +8,14 @@ class Hybrid(Pattern): # FIXME: doesn't handle changes properly?
         for child in args:
             self.add_child(child)
         self.children = args
-    
+
     def at(self, pos):
         length = len(self.children)
         selected = math.floor(min(pos.pos * length, length - 1))
         return self.children[selected].at(
             pos
-                .translate(-1 / length * selected)
-                .scale(1 / length)
+                .translate(-(selected * 1 / length))
+                .scale(length)
         )
     
     def changeat(self, pos):
@@ -23,6 +23,6 @@ class Hybrid(Pattern): # FIXME: doesn't handle changes properly?
         selected = math.floor(min(pos.pos * length, length - 1))
         self.children[selected].fullchangeat(
             pos
-                .translate(-1 / length * selected)
-                .scale(1 / length)
+                .translate(-(selected * 1 / length))
+                .scale(length)
         )

@@ -11,7 +11,7 @@ class Scaled(Pattern):
         self.wrapping = wrapping
 
     def at(self, pos):
-        newpos = math.ceil(pos.dpos / self.scale)
+        newpos = pos.dpos / self.scale
         if self.wrapping:
             newpos %= pos.total
         return self.inner.at(
