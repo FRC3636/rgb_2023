@@ -122,14 +122,12 @@ class Settings:
                 Smooth(
                     Memory(
                         Sample(
-                            Gradient(
-                                color.magenta.multiply(0.1), color.blue.multiply(0.3)
-                            )
+                            Gradient(color.blue.multiply(0.75), color.green.multiply(0.75))
                         )
                     ),
                     time = 1/16
                 ),
-                frequency = 8
+                frequency = 16
             )
         }
         self.properties = {
@@ -138,7 +136,7 @@ class Settings:
         }
 
     def get_pattern(self):
-        return self.presets[self.properties["presetId"]]
+        return self.presets.get(self.properties["presetId"])
 
     def update(self, nwtable):
         for k, v in self.properties.items():

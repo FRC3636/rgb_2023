@@ -31,7 +31,7 @@ settings.push(nwtable)
 while True:
     settings.update(nwtable)
     pattern = settings.get_pattern()
-    if settings.properties["enabled"]:
+    if settings.properties["enabled"] and pattern != None:
         for i in range(NUM_LEDS):
             color = pattern.at(Position(i, NUM_LEDS))
             strip[i] = (color.r, color.g, color.b)
