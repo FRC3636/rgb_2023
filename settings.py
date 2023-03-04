@@ -13,6 +13,9 @@ from patterns.noise import Noise
 from patterns.memory import Memory
 from patterns.rain import Rain
 from patterns.choice import Choice
+from patterns.timed import Timed
+from patterns.smooth import Smooth
+from patterns.sample import Sample
 
 class Settings:
     def __init__(self):
@@ -48,17 +51,19 @@ class Settings:
                     color.blue
                 )
             ),
+            "worms": Moving(
+                Scaled(
+                    Hybrid(
+                        Solid(color.Color(127, 127, 127)),
+                        Solid(color.Color(0, 0, 10))
+                    ),
+                    1/4
+                ),
+                speed = 3/4
+            ),
             "noise_rain": Rain(
                 Memory(
                     Noise(value = 0.7, saturation = 1)
-                )
-            ),
-            "wip": Rain(
-                Memory(
-                    Choice(
-                        Solid(color.red),
-                        Solid(color.blue)
-                    )
                 )
             ),
             "rainbow": Moving(
@@ -70,7 +75,7 @@ class Settings:
             "whole_rainbow": Just(
                 Moving(
                     Rainbow(),
-                    0.25
+                    1/4
                 )
             ),
             "uncover_rainbow": Moving(
@@ -78,7 +83,7 @@ class Settings:
                     Hybrid(
                         Moving(
                             Rainbow(),
-                            speed = -1/3 / (1/4)
+                            speed = -1/3 * 4
                         ),
                         Solid(color.black)
                     ),
@@ -89,6 +94,30 @@ class Settings:
                 Moving(
                     Rainbow()
                 )
+            ),
+            "fire": Timed(
+                Smooth(
+                    Memory(
+                        Sample(
+                            Gradient(color.yellow, color.Color(255, 64, 0), color.Color(255, 64, 0), color.Color(255, 64, 0), color.red)
+                        )
+                    ),
+                    time = 1/16
+                ),
+                frequency = 16
+            ),
+            "fire2": Timed(
+                Smooth(
+                    Memory(
+                        Sample(
+                            Gradient(
+                                color.magenta.multiply(0.1), color.blue.multiply(0.3)
+                            )
+                        )
+                    ),
+                    time = 1/16
+                ),
+                frequency = 8
             )
         }
         self.properties = {

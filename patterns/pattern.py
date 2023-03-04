@@ -1,4 +1,3 @@
-from util import color
 from enum import Enum
 
 class Pattern:
@@ -45,6 +44,19 @@ class Pattern:
     def behavior(self, behavior):
         self.behavior = behavior
         return self
+
+class SizedPattern(Pattern):
+    def __init__(self):
+        super().__init__()
+        self.remembered = None
+
+    def new_size(self, size):
+        pass
+
+    def at(self, pos):
+        if pos.total != self.remembered:
+            self.remembered = pos.total
+            self.new_size(pos.total)
 
 class ChangeBehavior(Enum):
     PASS_IGNORE = (True, False)

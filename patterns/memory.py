@@ -1,24 +1,25 @@
-from patterns.pattern import Pattern
+from patterns.pattern import SizedPattern
+from util.position import Position
 
-class Memory(Pattern):
+class Memory(SizedPattern):
     def __init__(self, inner):
         super().__init__()
         self.add_child(inner)
         self.inner = inner
         self.values = {}
-        self.positions = set()
+
+    def new_size(self, size):
+        self.values.clear()
+        for i in range(size):
+            self.values[i] = self.inner.at(Position(i, size))
 
     def at(self, pos):
-        self.positions.add(pos)
-        if pos in self.values.keys():
-            return self.values[pos]
-        val = self.inner.at(pos)
-        self.values[pos] = val
-        return val
+        super().at(pos)
+        return self.values[pos.ipos]
 
     def change(self):
-        for pos in self.positions:
-            self.values[pos] = self.inner.at(pos)
+        self.values.clear()
+        self.remembered = None
     
     def changeat(self, pos):
-        self.values[pos] = self.inner.at(pos)
+        self.values[pos.ipos] = self.inner.at(pos)

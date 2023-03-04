@@ -9,7 +9,7 @@ class Gradient(Pattern):
         self.colors = colors
     
     def at(self, pos):
-        f = pos * (len(self.colors) - 1)
+        f = pos.pos * (len(self.colors) - 1)
         oneLower = int(math.floor(f))
         oneHigher = int(math.ceil(f))
 
@@ -18,7 +18,7 @@ class Gradient(Pattern):
         diff = end - start
 
         if oneLower != oneHigher:
-            position = (pos - start) / diff
+            position = (pos.pos - start) / diff
         else:
             position = 0
 

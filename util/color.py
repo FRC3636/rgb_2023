@@ -5,6 +5,9 @@ class Color:
         self.r = r
         self.g = g
         self.b = b
+    
+    def multiply(self, scale):
+        return Color(int(self.r * scale), int(self.g * scale), int(self.b * scale))
 
 def hsv(h, s, v):
     color = hsv_to_rgb(h, s, v)
