@@ -16,6 +16,7 @@ from patterns.choice import Choice
 from patterns.timed import Timed
 from patterns.smooth import Smooth
 from patterns.sample import Sample
+from patterns.automata import Automata
 
 class Settings:
     def __init__(self):
@@ -132,7 +133,7 @@ class Settings:
         }
         self.properties = {
             "enabled": True,
-            "presetId": "rainbow_snakes2"
+            "presetId": "rainbow_snakes"
         }
 
     def get_pattern(self):
