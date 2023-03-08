@@ -7,12 +7,12 @@ import ntcore
 from settings import Settings
 from util.position import Position
 
-BRIGHTNESS = 0.2
+BRIGHTNESS = 1.0
 ORDER = neopixel.GRB
-NUM_LEDS = 117
+NUM_LEDS = 169
 DATA_PIN = board.D18
-# ADDR = "10.36.36.2"
-ADDR = "10.176.75.34"
+ADDR = "10.36.36.2"
+# ADDR = "10.176.75.34"
 DELAY = 1/144
 
 strip = neopixel.NeoPixel(
@@ -28,12 +28,16 @@ nwtable = instance.getTable("Lights")
 settings = Settings()
 settings.push(nwtable)
 
+# fixes layout of our lights
+mapping = lambda pos: pos.translate(7)
+
 while True:
     settings.update(nwtable)
     pattern = settings.get_pattern()
     if settings.properties["enabled"] and pattern != None:
         for i in range(NUM_LEDS):
-            color = pattern.at(Position(i, NUM_LEDS))
+            pos = mapping(Position(i, NUM_LEDS))
+            color = pattern.at(pos)
             strip[i] = (color.r, color.g, color.b)
         pattern.fullupdate(DELAY)
     else:

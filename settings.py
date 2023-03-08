@@ -1,4 +1,5 @@
 from util import color
+from util.range import Range
 
 from patterns.rainbow import Rainbow
 from patterns.moving import Moving
@@ -17,6 +18,8 @@ from patterns.timed import Timed
 from patterns.smooth import Smooth
 from patterns.sample import Sample
 from patterns.automata import Automata
+from patterns.conditional import Conditional
+from patterns.ranged import Ranged
 
 class Settings:
     def __init__(self):
@@ -25,7 +28,7 @@ class Settings:
                 Scaled(
                     Hybrid(
                         Solid(
-                            color.black
+                            color.magenta.multiply(0.02)
                         ),
                         Solid(
                             color.magenta
@@ -38,7 +41,7 @@ class Settings:
                 Scaled(
                     Hybrid(
                         Solid(
-                            color.black
+                            color.Color(255, 64, 0).multiply(0.02)
                         ),
                         Solid(
                             color.Color(255, 64, 0)
@@ -47,7 +50,7 @@ class Settings:
                     1/4
                 )
             ),
-            "resting": Breathe(
+            "breathe": Breathe(
                 Solid(
                     color.blue
                 )
@@ -129,6 +132,13 @@ class Settings:
                     time = 1/16
                 ),
                 frequency = 16
+            ),
+            "debug_five": Conditional(
+                lambda pos: (pos.ipos % 5) == 0, Gradient(color.red, color.blue)
+            ),
+            "debug_white": Solid(color.white),
+            "debug_multi": Ranged(
+                Range((Solid(color.red), 77), (Solid(color.green), 46), (Solid(color.blue), 46), (Solid(color.black), 1))
             )
         }
         self.properties = {
