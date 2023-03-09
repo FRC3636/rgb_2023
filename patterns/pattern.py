@@ -4,6 +4,7 @@ class Pattern:
     def __init__(self):
         self._children = []
         self.behavior = ChangeBehavior.PASS_FOLLOW
+        self.last_frame = -1
 
     def add_child(self, child):
         self._children.append(child)
@@ -11,13 +12,16 @@ class Pattern:
     def at(self, pos):
         pass
 
-    def update(self, dt):
+    def update(self, dt, frame):
         pass
 
-    def fullupdate(self, dt):
+    def fullupdate(self, dt, frame):
+        if frame == self.last_frame:
+            return
+        self.last_frame = frame
         for child in self._children:
-            child.fullupdate(dt)
-        self.update(dt)
+            child.fullupdate(dt, frame)
+        self.update(dt, frame)
 
     def change(self):
         pass

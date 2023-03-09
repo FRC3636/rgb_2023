@@ -49,7 +49,7 @@ class Automata(SizedPattern):
             new_state[i] = self.rules[n]
         self.state = new_state
 
-    def update(self, dt):
+    def update(self, dt, frame):
         self.time += dt
         while self.time >= 1 / self.frequency:
             self.time -= 1 / self.frequency

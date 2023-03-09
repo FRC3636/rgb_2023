@@ -30,7 +30,7 @@ class Rain(SizedPattern):
             self.brightnesses[pos.ipos]
         )
 
-    def update(self, dt):
+    def update(self, dt, frame):
         self.time += dt * self.speed
         while self.time >= 1:
             self.time -= 1

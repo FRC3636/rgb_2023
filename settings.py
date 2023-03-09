@@ -20,9 +20,10 @@ from patterns.sample import Sample
 from patterns.automata import Automata
 from patterns.conditional import Conditional
 from patterns.ranged import Ranged
+from patterns.flip import Flip
 
 class Settings:
-    def __init__(self):
+    def __init__(self, layout):
         self.presets = {
             "cube": Moving(
                 Scaled(
@@ -34,8 +35,9 @@ class Settings:
                             color.magenta
                         )
                     ),
-                    1/4
-                )
+                    1/2
+                ),
+                1
             ),
             "cone": Moving(
                 Scaled(
@@ -47,8 +49,9 @@ class Settings:
                             color.Color(255, 64, 0)
                         )
                     ),
-                    1/4
-                )
+                    1/2
+                ),
+                1
             ),
             "breathe": Breathe(
                 Solid(
@@ -136,22 +139,41 @@ class Settings:
             "debug_five": Conditional(
                 lambda pos: (pos.ipos % 5) == 0, Gradient(color.red, color.blue)
             ),
-            "debug_white": Solid(color.white),
-            "debug_multi": Ranged(
-                Range((Solid(color.red), 77), (Solid(color.green), 46), (Solid(color.blue), 46), (Solid(color.black), 1))
-            )
+            "debug_white": Solid(color.white)
         }
         self.properties = {
             "enabled": True,
-            "presetId": "rainbow_snakes"
+            "section_mode": True,
+            "body_section": "whole_rainbow",
+            "arm_section": "cube",
+            "flip_section": 2,
+            "default_pattern": "fire2"
         }
+        self.sections = [None, None, None]
+        self.update_sections()
+        self.pattern = Ranged(layout, self.sections)
+
+    def update_sections(self):
+        self.sections[0] = self.presets.get(self.properties["body_section"])
+        self.sections[1] = self.presets.get(self.properties["arm_section"])
+        self.sections[2] = self.sections[1]
+        flip = self.properties["flip_section"]
+        if flip != -1:
+            self.sections[flip] = Flip(self.sections[flip])
 
     def get_pattern(self):
-        return self.presets.get(self.properties["presetId"])
+        if self.properties["section_mode"]:
+            return self.pattern
+        return self.presets.get(self.properties["default_pattern"])
 
     def update(self, nwtable):
+        new_props = {}
         for k, v in self.properties.items():
-            self.properties[k] = nwtable.getValue(k, v)
+            new_props[k] = nwtable.getValue(k, v)
+        updated = new_props != self.properties
+        self.properties = new_props
+        if updated:
+            self.update_sections()
 
     def push(self, nwtable):
         for k, v in self.properties.items():

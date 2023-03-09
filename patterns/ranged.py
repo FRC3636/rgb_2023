@@ -2,10 +2,13 @@ from patterns.pattern import Pattern
 from util.position import Position
 
 class Ranged(Pattern):
-    def __init__(self, range):
+    def __init__(self, range, patterns):
         super().__init__()
         self.range = range
-    
+        self.patterns = patterns
+        for pattern in patterns:
+            self.add_child(pattern)
+
     def at(self, pos):
         selected = self.range.get(pos.ipos)
-        return selected[0].at(Position(pos.dpos - selected[1], selected[2] - selected[1]))
+        return self.patterns[selected[0]].at(Position(pos.dpos - selected[1], selected[2] - selected[1]))

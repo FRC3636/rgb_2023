@@ -27,7 +27,7 @@ class Smooth(SizedPattern):
         super().at(pos)
         return self.currents[pos.ipos]
 
-    def update(self, dt):
+    def update(self, dt, frame):
         change = dt / self.time
         if self.remembered != None:
             for i in range(self.remembered):

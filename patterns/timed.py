@@ -11,7 +11,7 @@ class Timed(Pattern):
     def at(self, pos):
         return self.inner.at(pos)
 
-    def update(self, dt):
+    def update(self, dt, frame):
         self.time += dt
         while self.time >= 1 / self.frequency:
             self.time -= 1 / self.frequency

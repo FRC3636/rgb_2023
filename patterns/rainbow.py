@@ -6,10 +6,6 @@ class Rainbow(Pattern):
         super().__init__()
         self.saturation = saturation
         self.value = value
-        self.offset = 0
     
     def at(self, pos):
         return color.hsv(pos.pos, self.saturation, self.value)
-    
-    def update(self, dt):
-        self.offset += dt

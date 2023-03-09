@@ -13,5 +13,5 @@ class Moving(Pattern):
     def at(self, pos):
         return self.inner.at(pos.translate(self.offset * pos.total))
 
-    def update(self, dt):
+    def update(self, dt, frame):
         self.offset = (self.offset + self.speed * dt) % 1

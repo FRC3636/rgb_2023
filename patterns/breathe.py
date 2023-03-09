@@ -21,7 +21,7 @@ class Breathe(Pattern):
             self.current
         )
 
-    def update(self, dt):
+    def update(self, dt, frame):
         self.time = self.time + dt * self.speed % (math.pi * 2)
         new = (math.sin(self.time) + 1) / 2
         if new >= self.current and self.direction == -1:
