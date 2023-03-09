@@ -7,6 +7,7 @@ import ntcore
 from settings import Settings
 from util.position import Position
 from util.range import Range
+from util.section import LeafSection, ParentSection, RootSection
 
 BRIGHTNESS = 1.0
 ORDER = neopixel.GRB
@@ -16,6 +17,19 @@ ADDR = "10.36.36.2"
 # ADDR = "10.176.75.34"
 DELAY = 1/144
 LAYOUT = Range(77, 46, 46)
+SECTIONS = RootSection(
+    LAYOUT,
+    [
+        LeafSection("body"),
+        ParentSection(
+            "arm",
+            [
+                LeafSection("rightarm", translation = 1),
+                LeafSection("leftarm", flipped = True)
+            ]
+        )
+    ]
+)
 
 strip = neopixel.NeoPixel(
     DATA_PIN, NUM_LEDS, pixel_order = ORDER, brightness = BRIGHTNESS, auto_write = False
@@ -25,17 +39,18 @@ instance = ntcore.NetworkTableInstance.getDefault()
 instance.startClient4("lights")
 instance.setServer(ADDR)
 
-nwtable = instance.getTable("Lights")
+lights = instance.getTable("Lights")
+gameinfo = instance.getTable("GameInfo")
 
-settings = Settings(LAYOUT)
-settings.push(nwtable)
+settings = Settings(SECTIONS)
+settings.push(lights)
 
 # fixes layout of our lights
 mapping = lambda pos: pos.translate(7)
 
 frame = 0
 while True:
-    settings.update(nwtable)
+    settings.update(lights, gameinfo)
     pattern = settings.get_pattern()
     if settings.properties["enabled"] and pattern != None:
         for i in range(NUM_LEDS):

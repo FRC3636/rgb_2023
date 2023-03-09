@@ -6,8 +6,7 @@ class Ranged(Pattern):
         super().__init__()
         self.range = range
         self.patterns = patterns
-        for pattern in patterns:
-            self.add_child(pattern)
+        self._children = patterns
 
     def at(self, pos):
         selected = self.range.get(pos.ipos)

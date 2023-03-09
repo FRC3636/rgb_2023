@@ -1,5 +1,4 @@
 from util import color
-from util.range import Range
 
 from patterns.rainbow import Rainbow
 from patterns.moving import Moving
@@ -21,9 +20,10 @@ from patterns.automata import Automata
 from patterns.conditional import Conditional
 from patterns.ranged import Ranged
 from patterns.flip import Flip
+from patterns.translate import Translated
 
 class Settings:
-    def __init__(self, layout):
+    def __init__(self, sections):
         self.presets = {
             "cube": Moving(
                 Scaled(
@@ -37,7 +37,7 @@ class Settings:
                     ),
                     1/2
                 ),
-                1
+                1.3
             ),
             "cone": Moving(
                 Scaled(
@@ -51,7 +51,7 @@ class Settings:
                     ),
                     1/2
                 ),
-                1
+                1.3
             ),
             "breathe": Breathe(
                 Solid(
@@ -139,41 +139,40 @@ class Settings:
             "debug_five": Conditional(
                 lambda pos: (pos.ipos % 5) == 0, Gradient(color.red, color.blue)
             ),
-            "debug_white": Solid(color.white)
+            "debug_white": Solid(color.white),
+            "none": Solid(color.black)
         }
         self.properties = {
-            "enabled": True,
-            "section_mode": True,
-            "body_section": "whole_rainbow",
-            "arm_section": "cube",
-            "flip_section": 2,
-            "default_pattern": "fire2"
+            "enabled": True
         }
-        self.sections = [None, None, None]
-        self.update_sections()
-        self.pattern = Ranged(layout, self.sections)
+        self.gameinfo = {
+            "stage": None,
+            "alliance": None,
+            "piece": None,
+            "matchtype": None,
+            "time": None,
+            "estopped": None
+        }
+        self.sections = sections
+        self.update_pattern()
 
-    def update_sections(self):
-        self.sections[0] = self.presets.get(self.properties["body_section"])
-        self.sections[1] = self.presets.get(self.properties["arm_section"])
-        self.sections[2] = self.sections[1]
-        flip = self.properties["flip_section"]
-        if flip != -1:
-            self.sections[flip] = Flip(self.sections[flip])
+    def update_pattern(self):
+        self.sections.get_section("body").set_preset("whole_rainbow")
+        self.pattern = self.sections.pattern(self.presets)
 
     def get_pattern(self):
-        if self.properties["section_mode"]:
-            return self.pattern
-        return self.presets.get(self.properties["default_pattern"])
+        return self.pattern
 
-    def update(self, nwtable):
+    def update(self, lights, gameinfo):
         new_props = {}
         for k, v in self.properties.items():
-            new_props[k] = nwtable.getValue(k, v)
+            new_props[k] = lights.getValue(k, v)
+        for k, v in self.gameinfo.items():
+            self.gameinfo[k] = gameinfo.getValue(k, v)
         updated = new_props != self.properties
         self.properties = new_props
         if updated:
-            self.update_sections()
+            self.update_pattern()
 
     def push(self, nwtable):
         for k, v in self.properties.items():
