@@ -1,13 +1,19 @@
-from patterns.pattern import Pattern
+from patterns.pattern import Pattern, ChangeBehavior
 from util.position import Position
 
+
 class Ranged(Pattern):
-    def __init__(self, range, patterns):
+    def __init__(self, maprange):
         super().__init__()
-        self.range = range
-        self.patterns = patterns
-        self._children = patterns
+        for item in maprange.items:
+            self.add_child(item[1][2])
+        self.maprange = maprange
+        self.behavior = ChangeBehavior.STOP_FOLLOW
 
     def at(self, pos):
-        selected = self.range.get(pos.ipos)
-        return self.patterns[selected[0]].at(Position(pos.dpos - selected[1], selected[2] - selected[1]))
+        start, length, pattern = self.maprange.get(pos.ipos)
+        return pattern.at(Position(pos.ipos - start, length))
+    
+    def changeat(self, pos):
+        start, length, pattern = self.maprange.get(pos.ipos)
+        return pattern.changeat(Position(pos.ipos - start, length))

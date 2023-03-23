@@ -1,4 +1,6 @@
 from util import color
+from util.section import Layout, Section, Part, PartTransform
+from default import *
 
 from patterns.rainbow import Rainbow
 from patterns.moving import Moving
@@ -19,8 +21,6 @@ from patterns.sample import Sample
 from patterns.automata import Automata
 from patterns.conditional import Conditional
 from patterns.ranged import Ranged
-from patterns.flip import Flip
-from patterns.translate import Translated
 
 def _update(a, b):
     updated = False
@@ -31,35 +31,13 @@ def _update(a, b):
     return updated
 
 class Settings:
-    def __init__(self, sections):
+    def __init__(self):
         self.presets = {
-            "cube": Moving(
-                Scaled(
-                    Hybrid(
-                        Solid(
-                            color.magenta.multiply(0.02)
-                        ),
-                        Solid(
-                            color.magenta
-                        )
-                    ),
-                    1/2
-                ),
-                1.3
-            ),
-            "cone": Moving(
-                Scaled(
-                    Hybrid(
-                        Solid(
-                            color.Color(255, 64, 0).multiply(0.02)
-                        ),
-                        Solid(
-                            color.Color(255, 64, 0)
-                        )
-                    ),
-                    1/2
-                ),
-                1.3
+            "cube": Solid(
+                 color.magenta
+	    ),
+            "cone": Solid(
+                color.Color(255, 64, 0)
             ),
             "breathe": Breathe(
                 Solid(
@@ -157,13 +135,10 @@ class Settings:
             "solid_white": Solid(color.white),
             "transrights": Solid(color.black)
         }
-        self.sections = sections
 
         self.properties = {
             "enabled": True
         }
-        for section in self.sections.all_sections.values():
-            self.properties[section.name] = None
         
         self.gameinfo = {
             "stage": None,
@@ -176,32 +151,69 @@ class Settings:
         self.update_pattern()
 
     def update_pattern(self):
-        self.sections.set_preset("none")
-
         stage = self.gameinfo.get("stage")
         piece = self.gameinfo.get("piece")
         estopped = self.gameinfo.get("estopped")
+        alliance = self.gameinfo.get("alliance")
+
+        layout = None
 
         if stage == None:
-            self.sections.get_section("body").set_preset("solid_blue")
+            layout = Layout(
+                Section(
+                    self.presets["solid_blue"],
+                    Part(EVERYTHING)
+                )
+            )
+        elif estopped:
+            layout = Layout(
+                Section(
+                    self.presets["solid_red"],
+                    Part(EVERYTHING)
+                )
+            )
         else:
-            self.sections.get_section("body").set_preset("whole_rainbow")
-        
-        if estopped:
-            self.sections.get_section("body").set_preset("solid_red")
-        elif stage == "disabled":
-            self.sections.get_section("body").set_preset("rainbow")
-        elif piece == "cube":
-            self.sections.get_section("arm").set_preset("cube")
-        elif piece == "cone":
-            self.sections.get_section("arm").set_preset("cone")
-        
-        for section in self.sections.all_sections.values():
-            val = self.properties[section.name]
-            if val != None:
-                section.set_preset(val)
+            body_pattern = "whole_rainbow"
+            arms_pattern = "rainbow"
+            panel_pattern = "rainbow"
+            
+            # if alliance == "red":
+            #     body_pattern = "solid_red"
+            # elif alliance == "blue":
+            #     body_pattern = "solid_blue"
+            
+            if stage == "teleop":
+                arms_pattern = piece
+            
+            layout = Layout(
+                Section(
+                    self.presets[body_pattern],
+                    Part(BODY1),
+                    Part(BODY2),
+                    Part(BODY3),
+                    Part(BODY4),
+                    Part(BODY5),
+                    Part(BODY6),
+                    Part(BODY7),
+                    Part(BODY8)
+                ),
+                Section(
+                    self.presets[arms_pattern],
+                    Part(RB_UP),
+                    Part(RB_DOWN)
+                ),
+                Section(
+                    self.presets[arms_pattern],
+                    Part(LB_UP),
+                    Part(LB_DOWN)
+                ),
+                Section(
+                    self.presets[panel_pattern],
+                    Part(PANEL)
+                )
+            )
 
-        self.pattern = self.sections.pattern(self.presets)
+        self.pattern = layout.pattern()
 
     def get_pattern(self):
         return self.pattern

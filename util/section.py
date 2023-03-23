@@ -1,5 +1,6 @@
 from patterns.manipulate import Manipulated
 from patterns.ranged import Ranged
+from util.range import MappedRange
 
 def _flatten(l):
     if l == []:
@@ -8,51 +9,50 @@ def _flatten(l):
         return _flatten(l[0]) + _flatten(l[1:])
     return l[:1] + _flatten(l[1:])
 
-class LeafSection:
-    def __init__(self, name, translation = 0, flipped = False):
-        self.name = name
-        self.translation = translation
-        self.flipped = flipped
-        self.preset = "none"
-    
-    def set_preset(self, preset):
-        self.preset = preset
 
-    def pattern(self, presets):
-        f = lambda pos: pos.translate(self.translation)
-        if self.flipped:
-            f = lambda pos: pos.translate(self.translation).flip()
-        preset = presets.get(self.preset)
-        if preset == None:
-            return presets["none"]
-        return Manipulated(preset, f)
-    
-    def get_children(self):
-        return []
+class Layout:
+    def __init__(self, *sections):
+        self.sections = sections
 
-class ParentSection(LeafSection):
-    def __init__(self, name, children):
-        super().__init__(name)
-        self.children = children
-    
-    def set_preset(self, preset):
-        for s in self.children:
-            s.set_preset(preset)
-    
-    def pattern(self, presets):
-        return [s.pattern(presets) for s in self.children]
-    
-    def get_children(self):
-        return self.children
+    def pattern(self):
+        ranges = []
+        for section in self.sections:
+            l = 0
+            for part in section.parts:
+                l += part.length()
+            start = 0
+            for part in section.parts:
+                length = part.length()
+                ranges.append(((part.start, part.end), (start, l, part.transform.apply(section.pattern))))
+                start += length
+        ranges.sort(key=lambda x: x[0][0])
+        r = MappedRange(*ranges)
+        return Ranged(r)
 
-class RootSection(ParentSection):
-    def __init__(self, range, sections):
-        super().__init__("root", sections)
-        self.range = range
-        self.all_sections = dict(map(lambda s: (s.name, s), _flatten([s.get_children() for s in self.children] + self.get_children())))
-    
-    def pattern(self, presets):
-        return Ranged(self.range, _flatten([s.pattern(presets) for s in self.children]))
-    
-    def get_section(self, name):
-        return self.all_sections[name]
+
+class Section:
+    def __init__(self, pattern, *parts):
+        self.pattern = pattern
+        self.parts = parts
+
+
+class PartTransform:
+    def __init__(self, translate=0, reverse=False):
+        self.translate = translate
+        self.reverse = reverse
+
+    def apply(self, pattern):
+        if self.reverse:
+            return Manipulated(pattern, lambda pos: pos.translate(self.translate).flip())
+        else:
+            return Manipulated(pattern, lambda pos: pos.translate(self.translate))
+
+
+class Part:
+    # exclusive of upper bound
+    def __init__(self, range, transform=PartTransform()):
+        self.start, self.end = range
+        self.transform = transform
+
+    def length(self):
+        return self.end - self.start

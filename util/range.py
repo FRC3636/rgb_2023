@@ -1,16 +1,21 @@
 from bisect import bisect_right as bisect
 
+
 class Range:
-    def __init__(self, *lengths):
-        self.lengths = list(lengths)
-        self.starts = []
-        self.ends = []
-        total = 0
-        for l in lengths:
-            self.starts.append(total)
-            total += l
-            self.ends.append(total)
+    def __init__(self, *ranges):
+        self.ranges = list(ranges)
+        self.ranges.sort(key=lambda x: x[0])
+        self.starts = list(map(lambda x: x[0], self.ranges))
 
     def get(self, ipos):
-        target = bisect(self.starts, ipos) - 1
-        return (target, self.starts[target], self.ends[target])
+        return bisect(self.starts, ipos) - 1
+
+
+class MappedRange(Range):
+    def __init__(self, *items):
+        super().__init__(*map(lambda x: x[0], items))
+        self.items = items
+
+    def get(self, ipos):
+        val = super().get(ipos)
+        return self.items[val][1]

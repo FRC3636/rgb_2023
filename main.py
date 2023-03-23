@@ -6,30 +6,14 @@ import ntcore
 
 from settings import Settings
 from util.position import Position
-from util.range import Range
-from util.section import LeafSection, ParentSection, RootSection
 
-BRIGHTNESS = 1.0
+BRIGHTNESS = 0.25
 ORDER = neopixel.GRB
-NUM_LEDS = 169
+NUM_LEDS = 250
 DATA_PIN = board.D18
 ADDR = "10.36.36.2"
 # ADDR = "10.176.75.34"
 DELAY = 1/144
-LAYOUT = Range(77, 46, 46)
-SECTIONS = RootSection(
-    LAYOUT,
-    [
-        LeafSection("body"),
-        ParentSection(
-            "arm",
-            [
-                LeafSection("rightarm", translation = 1),
-                LeafSection("leftarm", flipped = True)
-            ]
-        )
-    ]
-)
 
 strip = neopixel.NeoPixel(
     DATA_PIN, NUM_LEDS, pixel_order = ORDER, brightness = BRIGHTNESS, auto_write = False
@@ -42,7 +26,7 @@ instance.startClient4("lights")
 lights = instance.getTable("Lights")
 gameinfo = instance.getTable("GameInfo")
 
-settings = Settings(SECTIONS)
+settings = Settings()
 settings.push(lights)
 
 # fixes layout of our lights
