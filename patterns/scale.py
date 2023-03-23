@@ -1,4 +1,5 @@
 from patterns.pattern import Pattern
+from patterns.manipulate import Manipulated
 from util.position import Position
 import math
 
@@ -17,3 +18,5 @@ class Scaled(Pattern):
         return self.inner.at(
             Position(newpos, pos.total)
         )
+
+ScaledTo = lambda inner, scale: Manipulated(inner, lambda pos: Position(pos.dpos, scale))

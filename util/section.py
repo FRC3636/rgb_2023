@@ -22,7 +22,10 @@ class LeafSection:
         f = lambda pos: pos.translate(self.translation)
         if self.flipped:
             f = lambda pos: pos.translate(self.translation).flip()
-        return Manipulated(presets[self.preset], f)
+        preset = presets.get(self.preset)
+        if preset == None:
+            return presets["none"]
+        return Manipulated(preset, f)
     
     def get_children(self):
         return []

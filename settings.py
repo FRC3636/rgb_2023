@@ -22,6 +22,14 @@ from patterns.ranged import Ranged
 from patterns.flip import Flip
 from patterns.translate import Translated
 
+def _update(a, b):
+    updated = False
+    for k in b:
+        if b[k] != a.get(k):
+            updated = True
+    a.update(b)
+    return updated
+
 class Settings:
     def __init__(self, sections):
         self.presets = {
@@ -139,12 +147,24 @@ class Settings:
             "debug_five": Conditional(
                 lambda pos: (pos.ipos % 5) == 0, Gradient(color.red, color.blue)
             ),
-            "debug_white": Solid(color.white),
-            "none": Solid(color.black)
+            "none": Solid(color.black),
+            "solid_red": Solid(color.red),
+            "solid_yellow": Solid(color.yellow),
+            "solid_green": Solid(color.green),
+            "solid_cyan": Solid(color.cyan),
+            "solid_blue": Solid(color.blue),
+            "solid_magenta": Solid(color.magenta),
+            "solid_white": Solid(color.white),
+            "transrights": Solid(color.black)
         }
+        self.sections = sections
+
         self.properties = {
             "enabled": True
         }
+        for section in self.sections.all_sections.values():
+            self.properties[section.name] = None
+        
         self.gameinfo = {
             "stage": None,
             "alliance": None,
@@ -153,11 +173,34 @@ class Settings:
             "time": None,
             "estopped": None
         }
-        self.sections = sections
         self.update_pattern()
 
     def update_pattern(self):
-        self.sections.get_section("body").set_preset("whole_rainbow")
+        self.sections.set_preset("none")
+
+        stage = self.gameinfo.get("stage")
+        piece = self.gameinfo.get("piece")
+        estopped = self.gameinfo.get("estopped")
+
+        if stage == None:
+            self.sections.get_section("body").set_preset("solid_blue")
+        else:
+            self.sections.get_section("body").set_preset("whole_rainbow")
+        
+        if estopped:
+            self.sections.get_section("body").set_preset("solid_red")
+        elif stage == "disabled":
+            self.sections.get_section("body").set_preset("rainbow")
+        elif piece == "cube":
+            self.sections.get_section("arm").set_preset("cube")
+        elif piece == "cone":
+            self.sections.get_section("arm").set_preset("cone")
+        
+        for section in self.sections.all_sections.values():
+            val = self.properties[section.name]
+            if val != None:
+                section.set_preset(val)
+
         self.pattern = self.sections.pattern(self.presets)
 
     def get_pattern(self):
@@ -165,15 +208,21 @@ class Settings:
 
     def update(self, lights, gameinfo):
         new_props = {}
+        new_info = {}
         for k, v in self.properties.items():
             new_props[k] = lights.getValue(k, v)
         for k, v in self.gameinfo.items():
-            self.gameinfo[k] = gameinfo.getValue(k, v)
-        updated = new_props != self.properties
+            new_info[k] = gameinfo.getValue(k, v)
+        props_updated = new_props != self.properties
+        info_updated = new_info != self.gameinfo
+
         self.properties = new_props
-        if updated:
+        self.gameinfo = new_info
+
+        if info_updated or props_updated:
             self.update_pattern()
 
     def push(self, nwtable):
         for k, v in self.properties.items():
-            nwtable.putValue(k, v)
+            if v != None:
+                nwtable.putValue(k, v)

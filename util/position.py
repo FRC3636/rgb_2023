@@ -16,3 +16,6 @@ class Position:
     
     def scale(self, amnt):
         return Position(self.dpos, self.dtotal / amnt)
+    
+    def floor(self):
+        return Position(self.ipos, self.total)

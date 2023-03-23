@@ -36,8 +36,8 @@ strip = neopixel.NeoPixel(
 )
 
 instance = ntcore.NetworkTableInstance.getDefault()
-instance.startClient4("lights")
 instance.setServer(ADDR)
+instance.startClient4("lights")
 
 lights = instance.getTable("Lights")
 gameinfo = instance.getTable("GameInfo")
