@@ -196,7 +196,8 @@ class Settings:
             #     body_pattern = "solid_blue"
             
             if stage == "teleop":
-                arms_pattern = piece
+                uarm_pattern = piece
+                darm_pattern = piece
             
             layout = Layout(
                 Section(
