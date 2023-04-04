@@ -6,7 +6,7 @@ from patterns.rainbow import Rainbow
 from patterns.moving import Moving
 from patterns.solid import Solid
 from patterns.hybrid import Hybrid
-from patterns.scale import Scaled
+from patterns.scale import Scaled, ScaledTo
 from patterns.breathe import Breathe
 from patterns.cycle import Cycle
 from patterns.gradient import Gradient
@@ -133,7 +133,19 @@ class Settings:
             "solid_blue": Solid(color.blue),
             "solid_magenta": Solid(color.magenta),
             "solid_white": Solid(color.white),
-            "transrights": Solid(color.black)
+            "armrainbow": Just(
+                Moving(
+                    Gradient(color.red, color.yellow, color.green, color.cyan, color.magenta, color.red),
+                    1/4
+                )
+            ),
+            "armrainbow2": Just(
+                Moving(
+                    Gradient(color.red, color.yellow, color.green, color.cyan, color.magenta, color.red),
+                    1/4
+                ),
+                7
+            )
         }
 
         self.properties = {
@@ -174,8 +186,9 @@ class Settings:
             )
         else:
             body_pattern = "whole_rainbow"
-            arms_pattern = "rainbow"
-            panel_pattern = "rainbow"
+            uarm_pattern = "armrainbow"
+            darm_pattern = "armrainbow2"
+            panel_pattern = "whole_rainbow"
             
             # if alliance == "red":
             #     body_pattern = "solid_red"
@@ -198,13 +211,13 @@ class Settings:
                     Part(BODY8)
                 ),
                 Section(
-                    self.presets[arms_pattern],
+                    self.presets[uarm_pattern],
                     Part(RB_UP),
-                    Part(RB_DOWN)
+                    Part(LB_UP)
                 ),
                 Section(
-                    self.presets[arms_pattern],
-                    Part(LB_UP),
+                    self.presets[darm_pattern],
+                    Part(RB_DOWN),
                     Part(LB_DOWN)
                 ),
                 Section(

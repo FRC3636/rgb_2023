@@ -1,5 +1,6 @@
 from patterns.pattern import Pattern, ChangeBehavior
 from util.position import Position
+from util.color import black
 
 
 class Ranged(Pattern):
@@ -11,9 +12,15 @@ class Ranged(Pattern):
         self.behavior = ChangeBehavior.STOP_FOLLOW
 
     def at(self, pos):
-        start, length, pattern = self.maprange.get(pos.ipos)
-        return pattern.at(Position(pos.ipos - start, length))
+        val = self.maprange.get(pos.ipos)
+        if val != None:
+            start, length, pattern = val
+            return pattern.at(Position(pos.ipos - start, length))
+        else:
+            return black
     
     def changeat(self, pos):
-        start, length, pattern = self.maprange.get(pos.ipos)
-        return pattern.changeat(Position(pos.ipos - start, length))
+        val = self.maprange.get(pos.ipos)
+        if val != None:
+            start, length, pattern = val
+            return pattern.changeat(Position(pos.ipos - start, length))
