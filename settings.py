@@ -209,7 +209,8 @@ class Settings:
                     Part(BODY5),
                     Part(BODY6),
                     Part(BODY7),
-                    Part(BODY8)
+                    Part(BODY8),
+                    Part(BODY9)
                 ),
                 Section(
                     self.presets[uarm_pattern],
