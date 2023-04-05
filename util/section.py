@@ -37,6 +37,15 @@ class MultiSection(Section):
     def __init__(self, *children, **kwargs):
         super().__init__(**kwargs)
         self.children = children
+
+
+class RootSection(MultiSection):
+    def pattern(self):
+        ranges = []
+        for section in self.children:
+            ranges += section.compute_range()
+        range = MappedRange(*map(lambda x: (x.part.range, x.patternize()), ranges))
+        return Ranged(range)
         
         
 class SectionSpec:
@@ -55,20 +64,17 @@ class CombinedSection(MultiSection):
     
     def compute_range(self):
         ranges = []
-        start = 0
-        for section in self.sections:
-            ranges.append(((part.start, part.end), (start, l, part.transform.apply(section.pattern))))
-            start += length
-        ranges.sort(key=lambda x: x[0][0])
-        r = MappedRange(*ranges)
-        return Ranged(r)
+        for spec in self.sections:
+            r = spec.section.compute_range()
+            ranges += map(lambda x: x.with_pattern(self.pattern, self.length).transform_by(self.transform).add(spec.start), r)
+        return ranges
 
     @classmethod
-    def ordered(pattern, *children, **kwargs):
+    def ordered(cl, pattern, *children, **kwargs):
         length = 0
         positioned_children = []
         for child in children:
-            positioned_children.append(SectionSpec(length, child))
+            positioned_children.append(SectionSpec(child, length, child.length))
             length += child.length
         return CombinedSection(pattern, length, *positioned_children, **kwargs)
 
@@ -77,9 +83,17 @@ class PartSection(Section):
     def __init__(self, part, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.part = part
+        self.length = self.part.length()
     
     def compute_range(self):
-        return [ _SectionData(self).transform_by(self.transform) ]
+        return [ _SectionData(self.part).transform_by(self.transform) ]
+
+
+class _PatternData:
+    def __init__(self, pattern, start, length):
+        self.pattern = pattern
+        self.start = start
+        self.length = length
 
 
 class _SectionData:
@@ -87,10 +101,12 @@ class _SectionData:
         self.part = part
         self.transform = transform
         self.pattern = None
+        self.length = 0
         self.pos = 0
     
-    def with_pattern(self, pattern):
+    def with_pattern(self, pattern, length):
         self.pattern = pattern
+        self.length = length
         return self
     
     def transform_by(self, transform):
@@ -101,5 +117,5 @@ class _SectionData:
         self.pos += val
         return self
     
-    def pattern(self):
-        return self.transform.apply(self.pattern)
+    def patternize(self):
+        return _PatternData(self.transform.apply(self.pattern), self.pos, self.length)

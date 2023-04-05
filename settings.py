@@ -1,5 +1,5 @@
-from util.section import Layout, Section
-from default import *
+from util.section import RootSection
+from default import patterns, sections
 
 class Settings:
     def __init__(self):
@@ -26,24 +26,13 @@ class Settings:
         layout = None
 
         if stage == None:
-            layout = Layout(
-                Section(
-                    self.presets["solid_blue"],
-                    Part(EVERYTHING)
-                )
-            )
+            layout = sections.ALL(patterns.solid_blue)
         elif estopped:
-            layout = Layout(
-                Section(
-                    self.presets["solid_red"],
-                    Part(EVERYTHING)
-                )
-            )
+            layout = sections.ALL(patterns.solid_red)
         else:
-            body_pattern = "whole_rainbow"
-            uarm_pattern = "armrainbow"
-            darm_pattern = "armrainbow2"
-            panel_pattern = "whole_rainbow"
+            body = sections.BODY(patterns.whole_rainbow)
+            arms = sections.ARMS(patterns.whole_rainbow)
+            panel = sections.PANEL(patterns.whole_rainbow)
             
             # if alliance == "red":
             #     body_pattern = "solid_red"
@@ -51,36 +40,9 @@ class Settings:
             #     body_pattern = "solid_blue"
             
             if stage == "teleop":
-                uarm_pattern = piece
-                darm_pattern = piece
+                arms = sections.ARMS(patterns.cube if piece == "cube" else patterns.cone)
             
-            layout = Layout(
-                Section(
-                    self.presets[body_pattern],
-                    Part(BODY1),
-                    Part(BODY2),
-                    Part(BODY3),
-                    Part(BODY4),
-                    Part(BODY5),
-                    Part(BODY6),
-                    Part(BODY7),
-                    Part(BODY8)
-                ),
-                Section(
-                    self.presets[uarm_pattern],
-                    Part(RB_UP),
-                    Part(LB_UP)
-                ),
-                Section(
-                    self.presets[darm_pattern],
-                    Part(RB_DOWN),
-                    Part(LB_DOWN)
-                ),
-                Section(
-                    self.presets[panel_pattern],
-                    Part(PANEL)
-                )
-            )
+            layout = RootSection(body, arms, panel)
 
         self.pattern = layout.pattern()
 

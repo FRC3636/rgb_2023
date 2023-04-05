@@ -6,7 +6,7 @@ import ntcore
 
 from settings import Settings
 from util.position import Position
-from default import NUM_LEDS
+from default.parts import NUM_LEDS
 
 BRIGHTNESS = 0.25
 ORDER = neopixel.GRB
@@ -29,6 +29,7 @@ settings = Settings()
 settings.push(lights)
 
 frame = 0
+strip.fill((0, 0, 0))
 while True:
     settings.update(lights, gameinfo)
     pattern = settings.get_pattern()
