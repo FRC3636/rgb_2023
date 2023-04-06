@@ -14,7 +14,7 @@ class Ranged(Pattern):
     def at(self, pos):
         val = self.maprange.get(pos.ipos)
         if val != None:
-            return val.pattern.at(Position(pos.ipos - val.start, val.length))
+            return val.pattern.at(Position(pos.ipos - val.start + val.offset, val.length))
         else:
             return black
     

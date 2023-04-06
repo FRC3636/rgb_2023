@@ -1,8 +1,16 @@
 #!/usr/bin/env python
-import board
-import neopixel
+import os
 import time
 import ntcore
+
+if not os.environ.get("RGB_SIM") == "true":
+    import board
+    import neopixel
+    ADDR = "10.36.36.2"
+else:
+    from simulation import board
+    from simulation import neopixel
+    ADDR = "127.0.0.1"
 
 from settings import Settings
 from util.position import Position
@@ -11,7 +19,6 @@ from default.parts import NUM_LEDS
 BRIGHTNESS = 0.25
 ORDER = neopixel.GRB
 DATA_PIN = board.D18
-ADDR = "10.36.36.2"
 DELAY = 1/144
 
 strip = neopixel.NeoPixel(
@@ -30,7 +37,8 @@ settings.push(lights)
 
 frame = 0
 strip.fill((0, 0, 0))
-while True:
+def update(dt):
+    global frame
     settings.update(lights, gameinfo)
     pattern = settings.get_pattern()
     if settings.properties["enabled"] and pattern != None:
@@ -38,10 +46,14 @@ while True:
             pos = Position(i, NUM_LEDS)
             color = pattern.at(pos)
             strip[i] = (color.r, color.g, color.b)
-        pattern.fullupdate(DELAY, frame)
+        pattern.fullupdate(dt, frame)
     else:
         strip.fill((0, 0, 0))
     strip.show()
-    time.sleep(DELAY)
     frame += 1
     frame %= 1_000_000
+
+if __name__ == "__main__":
+    while True:
+        update(DELAY)
+        time.sleep(DELAY)

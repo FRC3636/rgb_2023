@@ -16,9 +16,9 @@ class Range:
 
 class MappedRange(Range):
     def __init__(self, *items):
+        self.items = list(items)
+        self.items.sort(key=lambda x: x[0][0])
         super().__init__(*map(lambda x: x[0], items))
-        self.items = items
-
     def get(self, ipos):
         val = super().get(ipos)
         if val == None:

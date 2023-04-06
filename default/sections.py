@@ -14,21 +14,32 @@ BODY = lambda pattern: CombinedSection.ordered(
     PartSection(parts.BODY8),
     PartSection(parts.BODY9)
 )
+LB_UP = PartSection(parts.LB_UP)
+LB_DOWN = PartSection(parts.LB_DOWN, SectionTransform(reverse=True))
 LEFT_ARM = lambda pattern: CombinedSection.ordered(
     pattern,
-    PartSection(parts.LB_UP),
-    PartSection(parts.LB_DOWN)
+    LB_UP,
+    LB_DOWN
 )
+RB_UP = PartSection(parts.RB_UP)
+RB_DOWN = PartSection(parts.RB_DOWN, SectionTransform(reverse=True, translate=6))
 RIGHT_ARM = lambda pattern: CombinedSection.ordered(
     pattern,
-    PartSection(parts.RB_UP),
-    PartSection(parts.RB_DOWN)
+    RB_UP,
+    RB_DOWN
 )
 ARMS = lambda pattern: CombinedSection.ordered(
     pattern,
     LEFT_ARM(pattern),
     RIGHT_ARM(pattern)
 )
-PANEL = lambda pattern: CombinedSection.ordered(pattern, PartSection(parts.PANEL))
+SYM_ARMS = lambda pattern: DistinctSection.all(
+    pattern,
+    LB_UP,
+    LB_DOWN,
+    RB_UP,
+    RB_DOWN
+)
+PANEL = lambda pattern: DistinctSection.all(pattern, PartSection(parts.PANEL))
 
-ALL = lambda pattern: RootSection(CombinedSection.ordered(pattern, PartSection(parts.EVERYTHING)))
+ALL = lambda pattern: RootSection(DistinctSection.all(pattern, PartSection(parts.EVERYTHING)))

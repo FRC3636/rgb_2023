@@ -13,7 +13,8 @@ class Settings:
             "piece": None,
             "matchtype": None,
             "time": None,
-            "estopped": None
+            "estopped": None,
+            "balanced": None
         }
         self.update_pattern()
 
@@ -22,6 +23,7 @@ class Settings:
         piece = self.gameinfo.get("piece")
         estopped = self.gameinfo.get("estopped")
         alliance = self.gameinfo.get("alliance")
+        balanced = self.gameinfo.get("balanced")
 
         layout = None
 
@@ -34,14 +36,12 @@ class Settings:
             arms = sections.ARMS(patterns.whole_rainbow)
             panel = sections.PANEL(patterns.whole_rainbow)
             
-            # if alliance == "red":
-            #     body_pattern = "solid_red"
-            # elif alliance == "blue":
-            #     body_pattern = "solid_blue"
-            
-            if stage == "teleop":
+            if balanced:
+                body = sections.BODY(patterns.fire if alliance == "red" else patterns.fire2)
+                arms = sections.SYM_ARMS(patterns.rainbow)
+                panel = sections.PANEL(patterns.rainbow)
+            elif stage == "teleop":
                 arms = sections.ARMS(patterns.cube if piece == "cube" else patterns.cone)
-            
             layout = RootSection(body, arms, panel)
 
         self.pattern = layout.pattern()
