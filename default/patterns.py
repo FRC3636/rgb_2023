@@ -39,7 +39,8 @@ worms = Moving(
         ),
         1/4
     ),
-    speed=3/4
+    speed=3/4,
+    floor=True
 )
 noise_rain = Rain(
     Memory(
@@ -65,7 +66,8 @@ rainbow_snakes = Moving(
             Solid(color.black)
         ),
         1/4
-    )
+    ),
+    floor=True
 )
 rainbow_snakes2 = Moving(
     Scaled(
@@ -79,7 +81,8 @@ rainbow_snakes2 = Moving(
             Solid(color.black)
         ),
         1/4
-    )
+    ),
+    floor=True
 )
 rainbow_rain = Rain(
     Moving(
