@@ -16,7 +16,10 @@ RB_DOWN = Part("rb_down", 49, 75)
 LB_UP = Part("lb_up", 129, 155)
 LB_DOWN = Part("lb_down", 155, 181)
 
-PANEL = Part("panel", 209, 280)
+PANEL_BOTTOM = Part("panel_bottom", 209, 221)
+PANEL_RIGHT = Part("panel_right", 221, 244)
+PANEL_TOP = Part("panel_top", 244, 257)
+PANEL_LEFT = Part("panel_left", 257, 280)
 
 NUM_LEDS = 287
 EVERYTHING = Part("everything", 0, NUM_LEDS)

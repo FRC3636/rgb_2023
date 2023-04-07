@@ -14,8 +14,8 @@ def main():
     pygame.font.init()
     sections = [ parts.BODY1, parts.BODY2, parts.BODY3, parts.BODY4, parts.BODY5, parts.BODY6, 
                  parts.BODY7, parts.BODY8, parts.BODY9, parts.RB_UP, parts.RB_DOWN, parts.LB_UP,
-                 parts.LB_DOWN, parts.PANEL ]
-    screen = pygame.display.set_mode((1920, 20 * (len(sections) + 1)), pygame.RESIZABLE)
+                 parts.LB_DOWN, parts.PANEL_BOTTOM, parts.PANEL_RIGHT, parts.PANEL_TOP, parts.PANEL_LEFT ]
+    screen = pygame.display.set_mode((880, 20 * (len(sections) + 1)), pygame.RESIZABLE)
     clock = pygame.time.Clock()
     font = pygame.font.SysFont("monospace", 16)
     running = True
@@ -31,7 +31,7 @@ def main():
         update(dt)
         
         for i, section in enumerate(sections):
-            x = 100
+            x = 160
             y = 20 + 20 * i
             text = texts[i]
             screen.blit(texts[i], (x - 20 - text.get_width(), y - text.get_height() / 2))

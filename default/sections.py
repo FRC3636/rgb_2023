@@ -40,6 +40,12 @@ SYM_ARMS = lambda pattern: DistinctSection.all(
     RB_UP,
     RB_DOWN
 )
-PANEL = lambda pattern: DistinctSection.all(pattern, PartSection(parts.PANEL))
+PANEL = lambda pattern: CombinedSection.ordered(
+    pattern,
+    PartSection(parts.PANEL_BOTTOM),
+    PartSection(parts.PANEL_RIGHT),
+    PartSection(parts.PANEL_TOP),
+    PartSection(parts.PANEL_LEFT)
+)
 
 ALL = lambda pattern: RootSection(DistinctSection.all(pattern, PartSection(parts.EVERYTHING)))

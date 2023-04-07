@@ -16,7 +16,7 @@ from settings import Settings
 from util.position import Position
 from default.parts import NUM_LEDS
 
-BRIGHTNESS = 0.25
+BRIGHTNESS = 0.5
 ORDER = neopixel.GRB
 DATA_PIN = board.D18
 DELAY = 1/144

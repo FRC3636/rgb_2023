@@ -1,7 +1,6 @@
 from patterns.pattern import Pattern
 from patterns.manipulate import Manipulated
 from util.position import Position
-import math
 
 class Scaled(Pattern):
     def __init__(self, inner, scale, wrapping = True):
@@ -13,8 +12,6 @@ class Scaled(Pattern):
 
     def at(self, pos):
         newpos = pos.dpos / self.scale
-        if self.wrapping:
-            newpos %= pos.total
         return self.inner.at(
             Position(newpos, pos.total)
         )
