@@ -28,6 +28,8 @@ RIGHT_ARM = lambda pattern: CombinedSection.ordered(
     RB_UP,
     RB_DOWN
 )
+UPS = lambda pattern: DistinctSection.all(pattern, RB_UP, LB_UP)
+DOWNS = lambda pattern: DistinctSection.all(pattern, RB_DOWN, LB_DOWN)
 ARMS = lambda pattern: CombinedSection.ordered(
     pattern,
     LEFT_ARM(pattern),

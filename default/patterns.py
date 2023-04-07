@@ -116,6 +116,7 @@ fire2 = Timed(
 debug_five = Conditional(
     lambda pos: (pos.ipos % 5) == 0, Gradient(color.red, color.blue)
 )
+
 none = Solid(color.black)
 solid_red = Solid(color.red)
 solid_yellow = Solid(color.yellow)

@@ -2,6 +2,7 @@ from patterns.manipulate import Manipulated
 from patterns.ranged import Ranged
 from util.range import MappedRange
 
+
 def _flatten(l):
     if l == []:
         return l
@@ -28,7 +29,7 @@ class SectionTransform:
 class Section:
     def __init__(self, transform=SectionTransform()):
         self.transform = transform
-    
+
     def compute_range(self):
         raise RuntimeError(f"unimplemented on {self}")
 
@@ -40,17 +41,25 @@ class MultiSection(Section):
     def __init__(self, *children, **kwargs):
         super().__init__(**kwargs)
         self.children = children
+    
+    def __repr__(self):
+        return f"{self.__class__.__name__} {self.children}"
 
 
 class RootSection(MultiSection):
-    def pattern(self):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         ranges = []
         for section in self.children:
             ranges += section.compute_range()
-        range = MappedRange(*map(lambda x: (x.part.range, x.patternize()), ranges))
-        return Ranged(range)
-        
-        
+        range = MappedRange(
+            *map(lambda x: (x.part.range, x.patternize()), ranges))
+        self.pat = Ranged(range)
+
+    def pattern(self):
+        return self.pat
+
+
 class SectionSpec:
     def __init__(self, section, start):
         self.section = section
@@ -63,12 +72,13 @@ class CombinedSection(MultiSection):
         super().__init__(*map(lambda x: x.section, sections), **kwargs)
         self.pattern = pattern
         self.len = length
-    
+
     def compute_range(self):
         ranges = []
         for spec in self.sections:
             r = spec.section.compute_range()
-            ranges += map(lambda x: x.with_pattern(self.pattern, self.len).transform_by(self.transform).add(spec.start), r)
+            ranges += map(lambda x: x.with_pattern(self.pattern,
+                          self.len).transform_by(self.transform).add(spec.start), r)
         return ranges
 
     def length(self):
@@ -88,12 +98,13 @@ class DistinctSection(MultiSection):
     def __init__(self, patterns, *args, **kwargs):
         self.patterns = patterns
         super().__init__(*args, **kwargs)
-    
+
     def compute_range(self):
         ranges = []
         for i, section in enumerate(self.children):
             r = section.compute_range()
-            ranges += map(lambda x: x.with_pattern(self.patterns[i], x.length), r)
+            ranges += map(lambda x: x.with_pattern(
+                self.patterns[i], x.length), r)
         return ranges
 
     @classmethod
@@ -105,12 +116,15 @@ class PartSection(Section):
     def __init__(self, part, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.part = part
-    
+
     def compute_range(self):
-        return [ _SectionData(self.part).transform_by(self.transform) ]
-    
+        return [_SectionData(self.part).transform_by(self.transform)]
+
     def length(self):
         return self.part.length()
+    
+    def __repr__(self):
+        return f"{self.__class__.__name__} ({self.part})"
 
 
 class _PatternData:
@@ -128,19 +142,19 @@ class _SectionData:
         self.pattern = None
         self.length = part.length()
         self.offset = 0
-    
+
     def with_pattern(self, pattern, length):
         self.pattern = pattern
         self.length = length
         return self
-    
+
     def transform_by(self, transform):
         self.transform = self.transform.plus(transform)
         return self
-        
+
     def add(self, val):
         self.offset += val
         return self
-    
+
     def patternize(self):
         return _PatternData(self.part.start, self.transform.apply(self.pattern), self.offset, self.length)

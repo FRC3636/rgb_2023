@@ -1,5 +1,5 @@
 from util.section import RootSection
-from default import patterns, sections
+from default import presets
 
 class Settings:
     def __init__(self):
@@ -16,7 +16,12 @@ class Settings:
             "estopped": None,
             "balanced": None
         }
+        self.active_preset = None
         self.update_pattern()
+
+    def set_preset(self, preset):
+        if self.active_preset == None or self.active_preset.preset != preset:
+            self.active_preset = preset.activate()
 
     def update_pattern(self):
         stage = self.gameinfo.get("stage")
@@ -25,26 +30,24 @@ class Settings:
         alliance = self.gameinfo.get("alliance")
         balanced = self.gameinfo.get("balanced")
 
-        layout = None
-
         if stage == None:
-            layout = sections.ALL(patterns.solid_blue)
+            self.set_preset(presets.DISCONNECTED)
         elif estopped:
-            layout = sections.ALL(patterns.solid_red)
+            self.set_preset(presets.ESTOP)
+        elif balanced:
+            self.set_preset(presets.BALANCED)
+            self.active_preset.set_slot("body", presets.HOT_FIRE if alliance == "red" else presets.COLD_FIRE)
         else:
-            body = sections.BODY(patterns.whole_rainbow)
-            arms = sections.ARMS(patterns.whole_rainbow)
-            panel = sections.PANEL(patterns.whole_rainbow)
+            self.set_preset(presets.DEFAULT)
             
-            if balanced:
-                body = sections.BODY(patterns.fire if alliance == "red" else patterns.fire2)
-                arms = sections.SYM_ARMS(patterns.rainbow)
-                panel = sections.PANEL(patterns.rainbow)
-            elif stage == "teleop":
-                arms = sections.ARMS(patterns.cube if piece == "cube" else patterns.cone)
-            layout = RootSection(body, arms, panel)
-
-        self.pattern = layout.pattern()
+            self.active_preset.set_slot("body", presets.WRAINBOW_BODY)
+            self.active_preset.set_slot("panel", presets.WRAINBOW_PANEL)
+            if stage == "teleop":
+                self.active_preset.set_slot("arms", presets.CUBE if piece == "cube" else presets.CONE)
+            else:
+                self.active_preset.set_slot("arms", presets.WRAINBOW_ARMS)
+        
+        self.pattern = self.active_preset.layout().pattern()
 
     def get_pattern(self):
         return self.pattern

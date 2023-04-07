@@ -7,3 +7,6 @@ class Part:
 
     def length(self):
         return self.end - self.start
+    
+    def __repr__(self):
+        return f"{self.__class__.__name__} {self.name}"

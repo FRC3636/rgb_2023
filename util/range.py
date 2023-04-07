@@ -9,6 +9,8 @@ class Range:
 
     def get(self, ipos):
         val = bisect(self.starts, ipos) - 1
+        if val < 0 or val >= len(self.ranges):
+            return None
         range = self.ranges[val]
         if range[0] <= ipos < range[1]:
             return val
