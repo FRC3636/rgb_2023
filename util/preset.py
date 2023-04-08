@@ -21,7 +21,7 @@ class ActivePreset:
     def set_slot(self, name, preset):
         if name not in self.preset.slots:
             raise KeyError(f"no such slot {name} found in preset {self.preset.name}")
-        elif self.children.get(name) != None and self.children[name].preset != preset:
+        elif self.children.get(name) != None and self.children[name].preset == preset:
             return
         self.current_layout = None
         self.children[name] = preset.activate()

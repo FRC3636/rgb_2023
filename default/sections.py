@@ -22,7 +22,7 @@ LEFT_ARM = lambda pattern: CombinedSection.ordered(
     LB_DOWN
 )
 RB_UP = PartSection(parts.RB_UP)
-RB_DOWN = PartSection(parts.RB_DOWN, SectionTransform(reverse=True, translate=6))
+RB_DOWN = PartSection(parts.RB_DOWN, SectionTransform(translate=6))
 RIGHT_ARM = lambda pattern: CombinedSection.ordered(
     pattern,
     RB_UP,
@@ -48,6 +48,13 @@ PANEL = lambda pattern: CombinedSection.ordered(
     PartSection(parts.PANEL_RIGHT),
     PartSection(parts.PANEL_TOP),
     PartSection(parts.PANEL_LEFT)
+)
+PANEL_INDICATOR = lambda sides, top, bottom: DistinctSection(
+    [ bottom, sides, top, sides ],
+    PartSection(parts.PANEL_BOTTOM),
+    PartSection(parts.PANEL_RIGHT),
+    PartSection(parts.PANEL_TOP),
+    PartSection(parts.PANEL_LEFT, SectionTransform(reverse=True))
 )
 
 ALL = lambda pattern: RootSection(DistinctSection.all(pattern, PartSection(parts.EVERYTHING)))

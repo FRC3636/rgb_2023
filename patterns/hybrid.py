@@ -2,7 +2,7 @@ import math
 from patterns.pattern import Pattern
 from util.position import Position
 
-class Hybrid(Pattern): # FIXME: doesn't handle changes properly?
+class Hybrid(Pattern):
     def __init__(self, *args):
         super().__init__()
         for child in args:

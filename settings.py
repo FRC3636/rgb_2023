@@ -1,4 +1,3 @@
-from util.section import RootSection
 from default import presets
 
 class Settings:

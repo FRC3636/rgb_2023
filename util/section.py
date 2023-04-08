@@ -22,8 +22,10 @@ class SectionTransform:
     def apply(self, pattern):
         if self.reverse:
             return Manipulated(pattern, lambda pos: pos.translate(self.translate).flip())
-        else:
+        elif self.translate != 0:
             return Manipulated(pattern, lambda pos: pos.translate(self.translate))
+        else:
+            return pattern
 
 
 class Section:

@@ -1,7 +1,7 @@
 from util.preset import Preset
 from util import section
 
-from default import sections, patterns
+from default import sections, patterns, circuit
 
 DEFAULT = Preset("root", "default", lambda children: section.RootSection(*children), [ "body", "arms", "panel" ])
 ESTOP = Preset("root", "estop", lambda _: sections.ALL(patterns.solid_red))
@@ -20,3 +20,5 @@ CONE = Preset("arms", "cone", lambda _: sections.ARMS(patterns.cone))
 
 HOT_FIRE = Preset("body", "hot_fire", lambda _: sections.BODY(patterns.fire))
 COLD_FIRE = Preset("body", "cold_fire", lambda _: sections.BODY(patterns.fire2))
+
+CIRCUIT = Preset("body", "circuit", lambda _: circuit.CIRCUIT(patterns.circuit))

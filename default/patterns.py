@@ -19,6 +19,7 @@ from patterns.sample import Sample
 from patterns.automata import Automata
 from patterns.conditional import Conditional
 from patterns.ranged import Ranged
+from patterns.flip import Flip
 
 cube = Solid(
     color.magenta
@@ -113,6 +114,19 @@ fire2 = Timed(
     ),
     frequency=16
 )
+circuit = Flip(
+    Moving(
+        Scaled(
+            Hybrid(
+                Solid(color.blue),
+                Solid(color.black)
+            ),
+            1/4
+        ),
+        floor=True
+    )
+)
+
 debug_five = Conditional(
     lambda pos: (pos.ipos % 5) == 0, Gradient(color.red, color.blue)
 )
