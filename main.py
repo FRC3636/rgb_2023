@@ -11,9 +11,10 @@ else:
     from simulation import neopixel
     ADDR = "127.0.0.1"
 
-import ntcore
-
-_NT_ENABLED = not os.environ.get("RGB_NT_DISABLE") == "true"
+if not os.environ.get("RGB_NT_SIM") == "true":
+    import ntcore
+else:
+    from simulation import ntcore
 
 from settings import Settings
 from util.position import Position
@@ -42,8 +43,7 @@ _frame = 0
 strip.fill((0, 0, 0))
 def update(dt):
     global _frame
-    if _NT_ENABLED:
-        settings.update(lights, gameinfo)
+    settings.update(lights, gameinfo)
     pattern = settings.get_pattern()
     if settings.properties["enabled"] and pattern != None:
         for i in range(NUM_LEDS):
@@ -58,6 +58,9 @@ def update(dt):
     _frame %= 1_000_000
 
 if __name__ == "__main__":
+    dt = 0
     while True:
-        update(DELAY)
+        prev = time.time()
+        update(dt)
         time.sleep(DELAY)
+        dt = time.time() - prev

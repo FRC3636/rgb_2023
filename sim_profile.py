@@ -2,9 +2,14 @@ import os
 import cProfile as prof
 import pstats
 
+from simulation import _default_inst
+
 os.environ["RGB_SIM"] = "true"
+os.environ["RGB_NT_SIM"] = "true"
 
 from main import update, DELAY
+
+_default_inst.getTable("GameInfo").putValue("stage", "disabled")
 
 def run_a_bunch():
     for _ in range(1000):
