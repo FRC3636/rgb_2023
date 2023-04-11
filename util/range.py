@@ -1,3 +1,4 @@
+from functools import cache
 from bisect import bisect_right as bisect
 
 
@@ -7,6 +8,7 @@ class Range:
         self.ranges.sort(key=lambda x: x[0])
         self.starts = list(map(lambda x: x[0], self.ranges))
 
+    @cache
     def get(self, ipos):
         val = bisect(self.starts, ipos) - 1
         if val < 0 or val >= len(self.ranges):
@@ -21,6 +23,8 @@ class MappedRange(Range):
         self.items = list(items)
         self.items.sort(key=lambda x: x[0][0])
         super().__init__(*map(lambda x: x[0], items))
+    
+    @cache
     def get(self, ipos):
         val = super().get(ipos)
         if val == None:

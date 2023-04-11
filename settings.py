@@ -33,18 +33,17 @@ class Settings:
             self.set_preset(presets.DISCONNECTED)
         elif estopped:
             self.set_preset(presets.ESTOP)
-        elif balanced:
-            self.set_preset(presets.BALANCED)
-            self.active_preset.set_slot("body", presets.HOT_FIRE if alliance == "red" else presets.COLD_FIRE)
+        # elif balanced:
+        #     self.set_preset(presets.BALANCED)
         else:
             self.set_preset(presets.DEFAULT)
             
-            self.active_preset.set_slot("body", presets.WRAINBOW_BODY)
-            self.active_preset.set_slot("panel", presets.WRAINBOW_PANEL)
+            self.active_preset.set_slot("body", presets.HOT_FIRE if alliance == "red" else presets.COLD_FIRE)
+            self.active_preset.set_slot("panel", presets.RAINBOW_PANEL)
             if stage == "teleop":
                 self.active_preset.set_slot("arms", presets.CUBE if piece == "cube" else presets.CONE)
             else:
-                self.active_preset.set_slot("arms", presets.WRAINBOW_ARMS)
+                self.active_preset.set_slot("arms", presets.RAINBOW_ARMS)
         
         self.pattern = self.active_preset.layout().pattern()
 

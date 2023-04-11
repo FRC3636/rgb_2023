@@ -15,6 +15,11 @@ WRAINBOW_ARMS = _wrainbow("arms", sections.ARMS)
 WRAINBOW_BODY = _wrainbow("body", sections.BODY)
 WRAINBOW_PANEL = _wrainbow("panel", sections.PANEL)
 
+_rainbow = lambda name, func: Preset(name, f"rainbow_{name}", lambda _: func(patterns.slow_rainbow))
+RAINBOW_ARMS = _rainbow("arms", sections.SYM_ARMS)
+RAINBOW_BODY = _rainbow("body", sections.BODY)
+RAINBOW_PANEL = _rainbow("body", sections.PANEL)
+
 CUBE = Preset("arms", "cube", lambda _: sections.ARMS(patterns.cube))
 CONE = Preset("arms", "cone", lambda _: sections.ARMS(patterns.cone))
 

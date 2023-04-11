@@ -48,11 +48,19 @@ noise_rain = Rain(
         Noise(value=0.7, saturation=1)
     )
 )
+slow_rainbow = Moving(
+    Scaled(
+        Rainbow(),
+        1/2
+    ),
+    speed=1
+)
 rainbow = Moving(
     Scaled(
         Rainbow(),
         1/2
-    )
+    ),
+    speed=3/2
 )
 whole_rainbow = Just(
     Moving(
