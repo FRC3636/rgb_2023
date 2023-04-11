@@ -20,6 +20,7 @@ def main():
     font = pygame.font.SysFont("monospace", 16)
     running = True
     dt = 0
+    frame = 0
     texts = []
     for section in sections:
         texts.append(font.render(section.name, True, (255, 255, 255)))
@@ -28,7 +29,7 @@ def main():
             if event.type == pygame.QUIT:
                 running = False
         screen.fill("black")
-        update(dt)
+        update(dt, frame)
         
         for i, section in enumerate(sections):
             x = 160
@@ -41,6 +42,8 @@ def main():
             
         pygame.display.flip()
         dt = clock.tick(60) / 1000
+        frame += 1
+        frame %= 1_000_000
     pygame.quit()
 
 main()

@@ -12,8 +12,11 @@ from main import update, DELAY
 _default_inst.getTable("GameInfo").putValue("stage", "disabled")
 
 def run_a_bunch():
+    frame = 0
     for _ in range(1000):
-        update(1/10)
+        update(1/10, frame)
+        frame += 1
+        frame %= 1_000_000
 
 profiler = prof.Profile()
 profiler.runcall(run_a_bunch)

@@ -39,10 +39,8 @@ gameinfo = instance.getTable("GameInfo")
 settings = Settings()
 settings.push(lights)
 
-_frame = 0
 strip.fill((0, 0, 0))
-def update(dt):
-    global _frame
+def update(dt, frame):
     settings.update(lights, gameinfo)
     pattern = settings.get_pattern()
     if settings.properties["enabled"] and pattern != None:
@@ -50,17 +48,18 @@ def update(dt):
             pos = Position(i, NUM_LEDS)
             color = pattern.at(pos)
             strip[i] = (color.r, color.g, color.b)
-        pattern.fullupdate(dt, _frame)
+        pattern.fullupdate(dt, frame)
     else:
         strip.fill((0, 0, 0))
     strip.show()
-    _frame += 1
-    _frame %= 1_000_000
 
 if __name__ == "__main__":
     dt = 0
+    frame = 0
     while True:
         prev = time.time()
         update(dt)
         time.sleep(DELAY)
         dt = time.time() - prev
+        frame += 1
+        frame %= 1_000_000
