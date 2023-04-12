@@ -1,4 +1,6 @@
 from colorsys import hsv_to_rgb
+from colormath.color_objects import sRGBColor, LCHabColor
+from colormath.color_conversions import convert_color
 
 class Color:
     def __init__(self, r, g, b):
@@ -15,6 +17,10 @@ class Color:
 def hsv(h, s, v):
     color = hsv_to_rgb(h, s, v)
     return Color(int(color[0] * 255), int(color[1] * 255), int(color[2] * 255))
+
+def lch(l, c, h):
+    color = convert_color(LCHabColor(l, c, h), sRGBColor)
+    return Color(int(color.clamped_rgb_r * 255), int(color.clamped_rgb_g * 255), int(color.clamped_rgb_b * 255))
 
 def _lerp(a, b, t):
     return a + (b - a) * t
