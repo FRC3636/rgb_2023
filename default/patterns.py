@@ -147,3 +147,5 @@ solid_cyan = Solid(color.cyan)
 solid_blue = Solid(color.blue)
 solid_magenta = Solid(color.magenta)
 solid_white = Solid(color.white)
+
+pride_flag = lambda *colors: Hybrid(*[Solid(col) for col in colors])

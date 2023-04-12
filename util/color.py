@@ -8,6 +8,9 @@ class Color:
     
     def multiply(self, scale):
         return Color(int(self.r * scale), int(self.g * scale), int(self.b * scale))
+    
+    def __repr__(self):
+        return f"Color({self.r}, {self.g}, {self.b})"
 
 def hsv(h, s, v):
     color = hsv_to_rgb(h, s, v)

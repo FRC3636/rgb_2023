@@ -1,4 +1,4 @@
-from default import presets
+from default import presets, pride
 
 class Settings:
     def __init__(self):
@@ -39,7 +39,7 @@ class Settings:
             self.set_preset(presets.DEFAULT)
             
             self.active_preset.set_slot("body", presets.HOT_FIRE if alliance == "red" else presets.COLD_FIRE)
-            self.active_preset.set_slot("panel", presets.RAINBOW_PANEL)
+            self.active_preset.set_slot("panel", pride.RANDOM_PRIDE_FLAG)
             if stage == "teleop":
                 self.active_preset.set_slot("arms", presets.CUBE if piece == "cube" else presets.CONE)
             else:
