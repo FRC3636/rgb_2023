@@ -12,7 +12,7 @@ class Position:
         return Position(self.dpos + amnt, self.dtotal)
 
     def flip(self):
-        return Position(self.dtotal - self.dpos, self.dtotal)
+        return Position(self.dtotal - self.dpos - 1, self.dtotal)
     
     def scale(self, amnt):
         return Position(self.dpos, self.dtotal / amnt)
