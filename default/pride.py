@@ -71,7 +71,7 @@ RAINBOW = _pride_flag("rainbow", _rainbowred, _rainboworange, _rainbowyellow, _r
 
 _agenderisyou = color.Color(0xBA, 0xBA, 0xBA)
 _agendergreen = color.Color(0xBA, 0xF5, 0x84)
-AGENDER = _pride_flag("agender", color.black, _agenderisyou, color.white, _agendergreen)
+AGENDER = _pride_flag("agender", color.black, _agenderisyou, color.white, _agendergreen, color.white, _agenderisyou, color.black)
 
 _bigenderpink = color.Color(0xC4, 0x79, 0xA2)
 _bigenderlpink = color.Color(0xED, 0xA5, 0xCD)
@@ -80,6 +80,10 @@ _bigenderlblue = color.Color(0x9A, 0xC7, 0xE8)
 _bigenderblue = color.Color(0x6D, 0x82, 0xD1)
 BIGENDER = _pride_flag("bigender", _bigenderpink, _bigenderlpink, _bigenderlavender, color.white, _bigenderlavender, _bigenderlblue, _bigenderblue)
 
+_intersexyellow = color.Color(0xFF, 0xD8, 0x00)
+_intersexpurple = color.Color(0x79, 0x02, 0xAA)
+INTERSEX = _pride_flag("intersex", _intersexyellow, _intersexyellow, _intersexpurple, _intersexyellow, _intersexyellow)
+
 RANDOM_PRIDE_FLAG = choice([
-    TRANSRIGHTS, ENBY, BI, PAN, GENDERFLUID, ACE, ARO, AROACE, LESBIAN, MLM, RAINBOW, AGENDER, BIGENDER
+    TRANSRIGHTS, ENBY, BI, PAN, GENDERFLUID, ACE, ARO, AROACE, LESBIAN, MLM, RAINBOW, AGENDER, BIGENDER, INTERSEX
 ])
